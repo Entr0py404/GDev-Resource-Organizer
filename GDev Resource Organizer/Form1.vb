@@ -298,6 +298,7 @@ Public Class Form1
                     ComboBox_Directory.Sorted = True
                     ComboBox_Directory.Sorted = False
                     ComboBox_Directory.Items.Insert(0, "\")
+                    ComboBox_Directory.SelectedItem = tempDirectoryStringShort.Remove(0, 1)
                     ComboBox_Directory.EndUpdate()
 
                     'Log msg
