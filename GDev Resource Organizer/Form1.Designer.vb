@@ -534,8 +534,6 @@ Partial Class Form1
         '
         'BackgroundWorker1
         '
-        Me.BackgroundWorker1.WorkerReportsProgress = True
-        Me.BackgroundWorker1.WorkerSupportsCancellation = True
         '
         'Form1
         '

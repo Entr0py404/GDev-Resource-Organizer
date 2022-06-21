@@ -52,17 +52,15 @@ Public Class Form1
     End Sub
     'Button_Close - Click
     Private Sub Button_Close_Click(sender As Object, e As EventArgs) Handles Button_Close.Click
-        If BackgroundWorker1.IsBusy Then
-            BackgroundWorker1.CancelAsync()
+        If Not BackgroundWorker1.IsBusy Then
+            TextBox_ProjectFilePath.Clear()
+            ListView_ProjectResources.Items.Clear()
+            ImageList1.Images.Clear()
+            ComboBox_Directory.Items.Clear()
+            RichTextBox_Log.Clear()
+            'Log msg
+            Log_msg("Project closed", Color.PaleGoldenrod)
         End If
-        TextBox_ProjectFilePath.Clear()
-        ListView_ProjectResources.Items.Clear()
-        ImageList1.Images.Clear()
-        ComboBox_Directory.Items.Clear()
-        RichTextBox_Log.Clear()
-
-        'Log msg
-        Log_msg("Project closed", Color.PaleGoldenrod)
     End Sub
     'Reload (ToolStripMenuItem) - Click
     Private Sub ReloadToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReloadToolStripMenuItem.Click
