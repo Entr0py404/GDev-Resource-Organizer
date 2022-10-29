@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.ComponentModel
+Imports System.IO
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 Public Class Form1
@@ -166,13 +167,6 @@ Public Class Form1
     Private Sub Button_MoveSelectedResources_Click(sender As Object, e As EventArgs) Handles Button_MoveSelectedResources.Click
         If File.Exists(TextBox_ProjectFilePath.Text) And Not ComboBox_Directory.SelectedIndex = -1 And ListView_ProjectResources.SelectedItems.Count > 0 Then
             Try
-                'Create needed Backup folder
-                If Not Directory.Exists(Path.GetDirectoryName(TextBox_ProjectFilePath.Text) & "\!BACKUP") Then
-                    Directory.CreateDirectory(Path.GetDirectoryName(TextBox_ProjectFilePath.Text) & "\!BACKUP")
-                End If
-                'Back up project file
-                My.Computer.FileSystem.CopyFile(TextBox_ProjectFilePath.Text, Path.GetDirectoryName(TextBox_ProjectFilePath.Text) & "\!BACKUP\" & Path.GetFileNameWithoutExtension(TextBox_ProjectFilePath.Text) & "_" & Now.ToString("MMddyyyy_hhmmss") & "_BACKUP.json")
-
                 Dim reader = New JsonTextReader(New StringReader(File.ReadAllText(TextBox_ProjectFilePath.Text)))
                 reader.FloatParseHandling = FloatParseHandling.Decimal
                 Dim jsonFile As JObject = JObject.Load(reader)
@@ -441,5 +435,17 @@ Public Class Form1
         Catch ex As Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical)
         End Try
+    End Sub
+    '
+    Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
+        'Ask the user if they would like to create a backup file
+        If MessageBox.Show("Would you like to create a backup of your project file?, it's highly suggested that you do.)", "Create backup file", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk) = DialogResult.Yes Then
+            'Create needed Backup folder
+            If Not Directory.Exists(Path.GetDirectoryName(TextBox_ProjectFilePath.Text) & "\!BACKUP") Then
+                Directory.CreateDirectory(Path.GetDirectoryName(TextBox_ProjectFilePath.Text) & "\!BACKUP")
+            End If
+            'Back up project file
+            My.Computer.FileSystem.CopyFile(TextBox_ProjectFilePath.Text, Path.GetDirectoryName(TextBox_ProjectFilePath.Text) & "\!BACKUP\" & Path.GetFileNameWithoutExtension(TextBox_ProjectFilePath.Text) & "_" & Now.ToString("MMddyyyy_hhmmss") & "_BACKUP.json")
+        End If
     End Sub
 End Class
