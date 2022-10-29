@@ -436,7 +436,7 @@ Public Class Form1
             MsgBox(ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
-    '
+    'BackgroundWorker1 - RunWorkerCompleted
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
         'Ask the user if they would like to create a backup file
         If MessageBox.Show("Would you like to create a backup of your project file?, It's highly suggested that you do before proceeding.", "Create backup file", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) = DialogResult.Yes Then
