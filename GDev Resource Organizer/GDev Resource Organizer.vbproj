@@ -141,6 +141,7 @@
     <Content Include="Resources\bitmap_font.png" />
     <Content Include="Resources\blank.png" />
     <Content Include="Resources\font.png" />
+    <None Include="Resources\glb.png" />
     <Content Include="Resources\json.png" />
     <Content Include="Resources\video.png" />
     <Content Include="Resources\webp.png" />

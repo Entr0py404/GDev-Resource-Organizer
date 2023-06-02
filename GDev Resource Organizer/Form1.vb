@@ -33,6 +33,7 @@ Public Class Form1
         TextBox_NewDirectory_Padding = RectangleShape_NewDirectory.Width - TextBox_NewDirectory.Width
 
         resizeLoadlock = False
+
     End Sub
     'Button_SelectProjectJSON - Click
     Private Sub Button_SelectProjectJSON_Click(sender As Object, e As EventArgs) Handles Button_SelectProjectJSON.Click
@@ -352,7 +353,7 @@ Public Class Form1
         If Me.InvokeRequired Then
             Invoke(New ListView_Invoker(AddressOf ListView_AccessControl), name, imageIndex, filePath)
         Else
-            ListView_ProjectResources.Items.Add(name, ImageList1.Images.Count - 1).SubItems.Add(filePath)
+            ListView_ProjectResources.Items.Add(name, imageIndex).SubItems.Add(filePath)
         End If
     End Sub
     'ImageList_AccessControl(filePath)
@@ -380,6 +381,16 @@ Public Class Form1
             Label_Loading.Visible = True
             ListView_ProjectResources.Items.Clear()
             ListView_ProjectResources.BeginUpdate()
+
+            ImageList1.Images.Clear()
+            ImageList1.Images.Add(My.Resources.blank) '0 blank
+            ImageList1.Images.Add(My.Resources.json) '1 json
+            ImageList1.Images.Add(My.Resources.webp) '2 webp
+            ImageList1.Images.Add(My.Resources.font) '3 font
+            ImageList1.Images.Add(My.Resources.video) '4 video
+            ImageList1.Images.Add(My.Resources.bitmap_font) '5 bitmap_font
+            ImageList1.Images.Add(My.Resources.audio) '6 audio
+            ImageList1.Images.Add(My.Resources.glb) '7 glb
         End If
     End Sub
     'EndtOfLoading_AccessControl()
@@ -396,14 +407,7 @@ Public Class Form1
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         Try
             StartOfLoading_AccessControl()
-            ImageList1.Images.Clear()
-            ImageList1.Images.Add(My.Resources.blank) '0
-            ImageList1.Images.Add(My.Resources.json) '1
-            ImageList1.Images.Add(My.Resources.webp) '2
-            ImageList1.Images.Add(My.Resources.font) '3
-            ImageList1.Images.Add(My.Resources.video) '4
-            ImageList1.Images.Add(My.Resources.bitmap_font) '5
-            ImageList1.Images.Add(My.Resources.audio) '6
+
             Dim jsonFile As JObject = JObject.Parse(File.ReadAllText(TextBox_ProjectFilePath.Text))
             For Each resource As JObject In jsonFile.Item("resources")("resources")
                 Dim tempFilePath As String = Path.GetDirectoryName(TextBox_ProjectFilePath.Text) & "\" & resource.Item("file").ToString.Replace("/", "\")
@@ -423,6 +427,9 @@ Public Class Form1
                         ListView_AccessControl(resource.Item("name").ToString, 5, resource.Item("file").ToString.Replace("/", "\"))
                     ElseIf SupportedAudioFormats.Contains(Path.GetExtension(tempFilePath).ToLower) Then
                         ListView_AccessControl(resource.Item("name").ToString, 6, resource.Item("file").ToString.Replace("/", "\"))
+                    ElseIf Path.GetExtension(tempFilePath) = ".glb" Then
+                        ListView_AccessControl(resource.Item("name").ToString, 7, resource.Item("file").ToString.Replace("/", "\"))
+                        'Console.WriteLine(tempFilePath)
                     Else
                         ListView_AccessControl(resource.Item("name").ToString, 0, resource.Item("file").ToString.Replace("/", "\"))
                     End If
